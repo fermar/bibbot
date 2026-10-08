@@ -2,12 +2,22 @@ import os
 import telegram
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+import bibfuncs
 
 token = os.environ.get("TELEGRAM_BOT_TOKEN")
+biblia = bibfuncs.cargar_biblia()
 
 print("Iniciando Bibot de Telegram...")
 print(f"Versión de Telegram: {telegram.__version__}")
 print(f"Token: {token}")
+
+# print(type(biblia))        # list o dict
+# print(biblia[0].keys())    # si es una lista de libros
+print("-------------------------------------")
+libro = biblia[0]
+print(libro["abbrev"], libro["name"])
+print(type(libro["chapters"][0]))   # list
+print(libro["chapters"][0][0])      # Génesis 1:1
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
