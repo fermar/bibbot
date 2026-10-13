@@ -1,40 +1,42 @@
 import os
 import telegram
-from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+# from telegram import Update
+from telegram.ext import Application, CommandHandler, MessageHandler, filters
 import bibfuncs
+import botfuncs
 
 token = os.environ.get("TELEGRAM_BOT_TOKEN")
+if token is None:
+    raise SystemExit("No se encontró la variable de entorno TELEGRAM_BOT_TOKEN. " \
+    "Por favor, configúrala antes de ejecutar el script.")
 biblia = bibfuncs.cargar_biblia()
 
+print()
+print("-------------------------------------")
 print("Iniciando Bibot de Telegram...")
 print(f"Versión de Telegram: {telegram.__version__}")
 print(f"Token: {token}")
 
-# print(type(biblia))        # list o dict
-# print(biblia[0].keys())    # si es una lista de libros
-print("-------------------------------------")
 libro = biblia[0]
-print(libro["abbrev"], libro["name"])
-print(type(libro["chapters"][0]))   # list
+
+print("-------------------------------------")
+print()
 print(libro["chapters"][0][0])      # Génesis 1:1
+print()
+print("-------------------------------------")
 
-
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    assert update.message is not None
-    await update.message.reply_text("¡Hola! Soy tu Bibot de Telegram.")
-
-
-async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text(f"tu mensaje: {update.message.text}") # type: ignore
-
+# Crear la aplicación
 app = Application.builder().token(token).build() # type: ignore
-app.add_handler(CommandHandler("start", start))
 
-app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
+# Agregar manejadores de comandos y mensajes
+app.add_handler(CommandHandler("start", botfuncs.start))
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, botfuncs.echo))
+
 print("Bibot de Telegram iniciado. Esperando mensajes... para salir presiona Ctrl+C")
+
+# Iniciar el bot
 app.run_polling()
 
-
+# finalizar el bot
 print("Amén")
 print()
