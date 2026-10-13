@@ -2,8 +2,8 @@ import json
 from pathlib import Path
 
 
-def cargar_biblia():
-    RUTA = Path(__file__).parent / "es_rvr1960.json"
+def cargar_biblia(archivo: str = "es_rvr1960.json") -> list:
+    RUTA = Path(__file__).parent / archivo
     try:
         with open(RUTA, "r", encoding="utf-8") as f:
             biblia = json.load(f)
