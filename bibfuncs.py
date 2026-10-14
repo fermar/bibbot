@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-
+# Función para cargar la Biblia desde un archivo JSON
 def cargar_biblia(archivo: str = "es_rvr1960.json") -> list:
     RUTA = Path(__file__).parent / archivo
     try:
